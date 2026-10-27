@@ -1,0 +1,145 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Flock Energy API",
+    "version": "1.0.0",
+    "description": "REST API wrapper scaffold for the Urja Meter Ops portal. Portal-backed operations require protocol discovery before use."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "service": {
+                      "type": "string",
+                      "example": "Flock Energy API"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/meters": {
+      "get": {
+        "summary": "List meters",
+        "responses": {
+          "200": {
+            "description": "Meter list"
+          },
+          "501": {
+            "description": "Portal integration not configured"
+          },
+          "502": {
+            "description": "Upstream portal error"
+          }
+        }
+      }
+    },
+    "/api/v1/meters/{id}": {
+      "get": {
+        "summary": "Get meter details",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Meter details"
+          },
+          "404": {
+            "description": "Meter not found"
+          },
+          "501": {
+            "description": "Portal integration not configured"
+          }
+        }
+      }
+    },
+    "/api/v1/meters/{id}/consumption": {
+      "get": {
+        "summary": "Get meter consumption",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consumption records"
+          },
+          "400": {
+            "description": "Invalid date parameters"
+          },
+          "501": {
+            "description": "Portal integration not configured"
+          }
+        }
+      }
+    },
+    "/api/v1/hierarchy": {
+      "get": {
+        "summary": "Get hierarchy (optional)",
+        "responses": {
+          "200": {
+            "description": "Hierarchy data"
+          },
+          "501": {
+            "description": "Portal integration not configured"
+          }
+        }
+      }
+    }
+  }
+}
